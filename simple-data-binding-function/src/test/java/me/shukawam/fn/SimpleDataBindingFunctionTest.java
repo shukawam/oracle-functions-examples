@@ -5,9 +5,9 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
-public class SimpleDataBindingFunction {
+public class SimpleDataBindingFunctionTest {
     @Rule
-    private static final FnTestingRule testing = FnTestingRule.createDefault();
+    public final FnTestingRule testing = FnTestingRule.createDefault();
 
     @Test
     public void testSimpleDataBinding() {
