@@ -16,10 +16,20 @@ public class JsonDataBindingFunctionTest {
     public final FnTestingRule testing = FnTestingRule.createDefault();
 
     @Test
-    public void testJsonDataBindingFunction() {
+    public void testJsonDataBindingFunction_noName() {
         testing.givenEvent().enqueue();
         testing.thenRun(JsonDataBindingFunction.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
         assertEquals("{\"name\":\"\",\"salutation\":\"Hello\"}", result.getBodyAsString());
+    }
+
+    @Test
+    public void testJsonDataBindingFunction_withName() {
+        testing.givenEvent()
+                .withBody("shukawam")
+                .enqueue();
+        testing.thenRun(JsonDataBindingFunction.class, "handleRequest");
+        FnResult result = testing.getOnlyResult();
+        assertEquals("{\"name\":\"shukawam\",\"salutation\":\"Hello\"}", result.getBodyAsString());
     }
 }
