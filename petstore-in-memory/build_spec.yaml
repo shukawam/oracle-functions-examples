@@ -1,0 +1,33 @@
+# https://docs.oracle.com/ja-jp/iaas/Content/devops/using/build_specs.htm
+# build runner config
+version: 0.1
+component: build
+timeoutInSeconds: 10000
+shell: bash
+env:
+  variables:
+    function_name: petstore-in-memory
+    function_version: 0.0.1
+  exportedVariables:
+    - tag
+
+# steps
+steps:
+  - type: Command
+    name: "Docker image build"
+    timeoutInSeconds: 4000
+    command: |
+      cd petstore-in-memory
+      fn build
+      docker tag ${function_name}:${function_version} ${function_name}
+      tag=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
+    onFailure:
+      - type: Command
+        command: |
+          echo "Failure successfully handled"
+        timeoutInSeconds: 60
+
+outputArtifacts:
+  - name: petstore-in-memory
+    type: DOCKER_IMAGE
+    location: petstore-in-memory
