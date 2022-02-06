@@ -23,7 +23,7 @@ public class PetstoreTest {
                 .withHeader("Fn-Http-Method", "GET")
                 .withHeader("Fn-Http-Request-Url", "/api/pets")
                 .enqueue();
-        testing.thenRun(Petstore.class, "handleGetRequest");
+        testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
         assertEquals(OutputEvent.Status.Success, result.getStatus());
         assertEquals("[{\"id\":1,\"name\":\"dog\"},{\"id\":2,\"name\":\"cat\"},{\"id\":3,\"name\":\"bird\"},{\"id\":4,\"name\":\"fish\"},{\"id\":5,\"name\":\"snake\"},{\"id\":6,\"name\":\"lizard\"},{\"id\":7,\"name\":\"hamster\"},{\"id\":8,\"name\":\"rabbit\"},{\"id\":9,\"name\":\"turtle\"},{\"id\":10,\"name\":\"pig\"}]"
@@ -36,7 +36,7 @@ public class PetstoreTest {
                 .withHeader("Fn-Http-Method", "GET")
                 .withHeader("Fn-Http-Request-Url", "/api/pets/1")
                 .enqueue();
-        testing.thenRun(Petstore.class, "handleGetRequest");
+        testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
         assertEquals(OutputEvent.Status.Success, result.getStatus());
         assertEquals("{\"id\":1,\"name\":\"dog\"}", result.getBodyAsString());
@@ -48,7 +48,7 @@ public class PetstoreTest {
                 .withHeader("Fn-Http-Method", "GET")
                 .withHeader("Fn-Http-Request-Url", "/api/pets/100")
                 .enqueue();
-        testing.thenRun(Petstore.class, "handleGetRequest");
+        testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
         assertEquals(OutputEvent.Status.Success, result.getStatus());
         assertEquals("{\"id\":0,\"name\":\"not found\"}", result.getBodyAsString());
@@ -63,7 +63,7 @@ public class PetstoreTest {
                 .withHeader("Fn-Http-Request-Url", "/api/pets")
                 .withBody(String.format("{\"id\":%d,\"name\":\"%s\"}", id, name))
                 .enqueue();
-        testing.thenRun(Petstore.class, "handlePostRequest");
+        testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
         assertEquals(OutputEvent.Status.Success, result.getStatus());
         JSONAssert.assertEquals(String.format("{\"id\":%d,\"name\":\"%s\"}", id, name), result.getBodyAsString(), true);
@@ -75,7 +75,7 @@ public class PetstoreTest {
                 .withHeader("Fn-Http-Method", "PUT")
                 .withHeader("Fn-Http-Request-Url", "/api/pets/1")
                 .enqueue();
-        testing.thenRun(Petstore.class, "handleGetRequest");
+        testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
         assertEquals(OutputEvent.Status.Success, result.getStatus());
         assertEquals("{\"message\":\"error\",\"data\":\"Method not supported\"}", result.getBodyAsString());
