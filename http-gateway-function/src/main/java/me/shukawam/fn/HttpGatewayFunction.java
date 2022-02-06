@@ -28,6 +28,7 @@ public class HttpGatewayFunction {
             ctx.getHeaders().asMap().forEach((k, v) -> LOGGER.info(k + ": " + v));
             LOGGER.info("END: HtpGatewayContext");
             LOGGER.info("START: InvocationContext");
+            // invocation contexts
             LOGGER.info(ctx.getInvocationContext().getRuntimeContext().getAppID());
             LOGGER.info(ctx.getInvocationContext().getRuntimeContext().getAppName());
             LOGGER.info(ctx.getInvocationContext().getRuntimeContext().getFunctionID());
