@@ -1,6 +1,7 @@
 package me.shukawam.fn.petstore;
 
 import com.oracle.bmc.auth.ResourcePrincipalAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
 import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
@@ -35,6 +36,12 @@ public class PetRepositoryImpl implements PetRepository {
     final static String CONN_FACTORY_CLASS_NAME = "oracle.jdbc.pool.OracleDataSource";
 
     public PetRepositoryImpl() {
+        LOGGER.info("*** CONNECTION INFO ***");
+        LOGGER.info("namespace: " + namespace);
+        LOGGER.info("bucketName: " + bucketName);
+        LOGGER.info("dbUser: " + dbUser);
+        LOGGER.info("dbPassword: " + dbPassword);
+        LOGGER.info("dbUrl: " + dbUrl);
         poolDataSource = PoolDataSourceFactory.getPoolDataSource();
         try {
             poolDataSource.setConnectionFactoryClassName(CONN_FACTORY_CLASS_NAME);
@@ -75,11 +82,12 @@ public class PetRepositoryImpl implements PetRepository {
             PreparedStatement statement = conn.prepareStatement("SELECT id, name FROM PETS WHERE id = ?");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            Pet pet = resultSet.getObject(0, Pet.class);
-            if (pet == null) {
-                throw new RuntimeException("Pet not found");
+            if (resultSet.next()) {
+                Pet pet = new Pet(resultSet.getInt("id"), resultSet.getString("name"));
+                return pet;
+            } else {
+                return new Pet(0, "not found");
             }
-            return pet;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -119,7 +127,11 @@ public class PetRepositoryImpl implements PetRepository {
 
     private void downloadWallet() {
         // resource principal
-        final ResourcePrincipalAuthenticationDetailsProvider provider = ResourcePrincipalAuthenticationDetailsProvider.builder().build();
+        // final ResourcePrincipalAuthenticationDetailsProvider provider =
+        // ResourcePrincipalAuthenticationDetailsProvider.builder().build();
+        // instance principal
+        final InstancePrincipalsAuthenticationDetailsProvider provider = InstancePrincipalsAuthenticationDetailsProvider
+                .builder().build();
         ObjectStorage client = new ObjectStorageClient(provider);
         client.setRegion("AP_TOKYO_1");
         LOGGER.info("Retrieving a list of all objects in /" + namespace + "/" + bucketName + "...");

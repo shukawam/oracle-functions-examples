@@ -29,10 +29,10 @@ public class PetstoreDatabase {
         LOGGER.info(ctx.getRequestURL());
         if (ctx.getRequestURL().equals("/api/pets")) {
             LOGGER.info("GET /api/pets");
-            return getAllPets(new PetRepositoryImpl());
+            return getAllPets();
         } else {
             LOGGER.info("GET /api/pets/{id}");
-            return getPetById(Integer.parseInt(ctx.getRequestURL().substring(ctx.getRequestURL().lastIndexOf("/") + 1)), petRepository);
+            return getPetById(Integer.parseInt(ctx.getRequestURL().substring(ctx.getRequestURL().lastIndexOf("/") + 1)));
         }
     }
 
@@ -49,21 +49,21 @@ public class PetstoreDatabase {
             }
         });
         if (ctx.getRequestURL().equals("/api/pets")) {
-            return createPet(pet, petRepository);
+            return createPet(pet);
         } else {
             return new Response("error", "Method not supported");
         }
     }
 
-    private List<Pet> getAllPets(PetRepositoryImpl petRepository) {
+    private List<Pet> getAllPets() {
         return petRepository.getAllPets();
     }
 
-    private Pet getPetById(int id, PetRepositoryImpl petRepository) {
+    private Pet getPetById(int id) {
         return petRepository.getPetById(id);
     }
 
-    private Pet createPet(Pet pet, PetRepositoryImpl petRepository) {
+    private Pet createPet(Pet pet) {
         return petRepository.createPet(pet);
     }
 }

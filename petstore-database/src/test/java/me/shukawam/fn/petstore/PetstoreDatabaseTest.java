@@ -21,7 +21,7 @@ public class PetstoreDatabaseTest {
     public void testGetAllPets() {
         testing.givenEvent()
                 .withHeader("Fn-Http-Method", "GET")
-                .withHeader("Fn-Http-Request-Url", "/pets")
+                .withHeader("Fn-Http-Request-Url", "/api/pets")
                 .enqueue();
         testing.thenRun(PetstoreDatabase.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
