@@ -47,7 +47,7 @@ public class Petstore {
             } catch (IOException e) {
                 e.printStackTrace();
                 LOGGER.info("Error parsing request body");
-                return null;
+                throw new RuntimeException(e);
             }
         });
         if (ctx.getRequestURL().equals("/api/pets")) {
