@@ -10,7 +10,17 @@ public class SimpleDataBindingFunctionTest {
     public final FnTestingRule testing = FnTestingRule.createDefault();
 
     @Test
-    public void testSimpleDataBinding() {
+    public void testSimpleDataBinding_withName() {
+        testing.givenEvent()
+                .withBody("john")
+                .enqueue();
+        testing.thenRun(SimpleDataBindingFunction.class, "handleRequest");
+        FnResult result = testing.getOnlyResult();
+        assertEquals("Hello john!", result.getBodyAsString());
+    }
+
+    @Test
+    public void testSimpleDataBinding_noName() {
         testing.givenEvent().enqueue();
         testing.thenRun(SimpleDataBindingFunction.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
