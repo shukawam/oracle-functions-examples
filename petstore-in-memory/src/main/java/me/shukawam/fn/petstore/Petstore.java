@@ -29,11 +29,11 @@ public class Petstore {
 
     private Object handleGetRequest(HTTPGatewayContext ctx) {
         LOGGER.info(ctx.getRequestURL());
-        if (ctx.getRequestURL().equals("/api/pets")) {
-            LOGGER.info("GET /api/pets");
+        if (ctx.getRequestURL().equals("/alpha1/pets")) {
+            LOGGER.info("GET /alpha1/pets");
             return getAllPets(new PetRepositoryImpl());
         } else {
-            LOGGER.info("GET /api/pets/{id}");
+            LOGGER.info("GET /alpha1/pets/{id}");
             return getPetById(Integer.parseInt(ctx.getRequestURL().substring(ctx.getRequestURL().lastIndexOf("/") + 1)), petRepository);
         }
     }
@@ -50,7 +50,7 @@ public class Petstore {
                 throw new RuntimeException(e);
             }
         });
-        if (ctx.getRequestURL().equals("/api/pets")) {
+        if (ctx.getRequestURL().equals("/alpha1/pets")) {
             return createPet(pet, petRepository);
         } else {
             return new Response("error", "Method not supported");

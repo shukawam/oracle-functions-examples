@@ -21,7 +21,7 @@ public class PetstoreTest {
     public void testGetAllPets() {
         testing.givenEvent()
                 .withHeader("Fn-Http-Method", "GET")
-                .withHeader("Fn-Http-Request-Url", "/api/pets")
+                .withHeader("Fn-Http-Request-Url", "/alpha1/pets")
                 .enqueue();
         testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
@@ -34,7 +34,7 @@ public class PetstoreTest {
     public void testGetPetById() {
         testing.givenEvent()
                 .withHeader("Fn-Http-Method", "GET")
-                .withHeader("Fn-Http-Request-Url", "/api/pets/1")
+                .withHeader("Fn-Http-Request-Url", "/alpha1/pets/1")
                 .enqueue();
         testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
@@ -46,7 +46,7 @@ public class PetstoreTest {
     public void testGetPetById_NotFound() {
         testing.givenEvent()
                 .withHeader("Fn-Http-Method", "GET")
-                .withHeader("Fn-Http-Request-Url", "/api/pets/100")
+                .withHeader("Fn-Http-Request-Url", "/alpha1/pets/100")
                 .enqueue();
         testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
@@ -60,7 +60,7 @@ public class PetstoreTest {
         String name = "bird";
         testing.givenEvent()
                 .withHeader("Fn-Http-Method", "POST")
-                .withHeader("Fn-Http-Request-Url", "/api/pets")
+                .withHeader("Fn-Http-Request-Url", "/alpha1/pets")
                 .withBody(String.format("{\"id\":%d,\"name\":\"%s\"}", id, name))
                 .enqueue();
         testing.thenRun(Petstore.class, "handleRequest");
@@ -73,7 +73,7 @@ public class PetstoreTest {
     public void testMethodNotAllowed() {
         testing.givenEvent()
                 .withHeader("Fn-Http-Method", "PUT")
-                .withHeader("Fn-Http-Request-Url", "/api/pets/1")
+                .withHeader("Fn-Http-Request-Url", "/alpha1/pets/1")
                 .enqueue();
         testing.thenRun(Petstore.class, "handleRequest");
         FnResult result = testing.getOnlyResult();
