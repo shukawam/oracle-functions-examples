@@ -10,8 +10,8 @@
         <jackson.version>2.13.1</jackson.version>
         <ojdbc.version>21.1.0.0</ojdbc.version>
     </properties>
-    <groupId>com.example.fn</groupId>
-    <artifactId>hello</artifactId>
+    <groupId>me.shukawam</groupId>
+    <artifactId>petstore-database</artifactId>
     <version>1.0.0</version>
 
     <dependencies>
