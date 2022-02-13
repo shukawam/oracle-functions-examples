@@ -1,0 +1,39 @@
+# https://docs.oracle.com/ja-jp/iaas/Content/devops/using/build_specs.htm
+# build runner config
+version: 0.1
+component: build
+timeoutInSeconds: 10000
+shell: bash
+env:
+  variables:
+    function_name: petstore-database
+    function_version: 0.0.1
+  vaultVariables:
+    - namespace: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqai5hjqbjed6js6fwi35p2ckdgx37j2elrbubfxjfjc6yq
+    - bucket_name: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqa7jh6bqepzmhwa6xppyowc7tkyanlpsamfmvbwwmrvfba
+    - db_user: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqa2bnktujewb2yjygcnl5qcutgawkzoihtzvs6f36akhxa
+    - db_password: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqawrcaunf4qdtk2q23okamirei7qoih2k4wuntmp2ynpqa
+    - db_url: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqag5ircbh64txqft2psx5rxrktpyzdt6ec2sutqf7cjtwq
+  exportedVariables:
+    - tag
+
+# steps
+steps:
+  - type: Command
+    name: "Docker image build"
+    timeoutInSeconds: 4000
+    command: |
+      cd petstore-database
+      fn build --build-arg namespace=${namespace} --build-arg bucket_name=${bucket_name} --build-arg db_user=${db_user} --build-arg db_password=${db_password} --build-arg db_url=${db_url}
+      docker tag ${function_name}:${function_version} ${function_name}
+      tag=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
+    onFailure:
+      - type: Command
+        command: |
+          echo "Failure successfully handled"
+        timeoutInSeconds: 60
+
+outputArtifacts:
+  - name: petstore-database
+    type: DOCKER_IMAGE
+    location: petstore-database
