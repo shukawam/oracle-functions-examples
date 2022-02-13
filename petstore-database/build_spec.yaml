@@ -24,7 +24,12 @@ steps:
     timeoutInSeconds: 4000
     command: |
       cd petstore-database
-      fn build --build-arg namespace=${namespace} --build-arg bucket_name=${bucket_name} --build-arg db_user=${db_user} --build-arg db_password=${db_password} --build-arg db_url=${db_url}
+      echo "namespace: " ${namespace}
+      echo "bucket_name: " ${bucket_name}
+      echo "db_user: " ${db_user}
+      echo "db_password: " ${db_password}
+      echo "db_url: " ${db_url}
+      fn build --verbose --build-arg namespace=${namespace} --build-arg bucket_name=${bucket_name} --build-arg db_user=${db_user} --build-arg db_password=${db_password} --build-arg db_url=${db_url}
       docker tag ${function_name}:${function_version} ${function_name}
       tag=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
     onFailure:
