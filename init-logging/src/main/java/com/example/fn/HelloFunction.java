@@ -10,8 +10,7 @@ public class HelloFunction {
     public HelloFunction() {
         Date now = new Date();
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-        LOGGER.info(sf.format(now));
-        LOGGER.info("HelloFunction constructor");
+        LOGGER.info(sf.format(now) + ": HelloFunction constructor");
     }
 
     public String handleRequest(String input) {
