@@ -127,11 +127,11 @@ public class PetRepositoryImpl implements PetRepository {
 
     private void downloadWallet() {
         // resource principal
-        // final ResourcePrincipalAuthenticationDetailsProvider provider =
-        // ResourcePrincipalAuthenticationDetailsProvider.builder().build();
+         final ResourcePrincipalAuthenticationDetailsProvider provider =
+         ResourcePrincipalAuthenticationDetailsProvider.builder().build();
         // instance principal
-        final InstancePrincipalsAuthenticationDetailsProvider provider = InstancePrincipalsAuthenticationDetailsProvider
-                .builder().build();
+        // final InstancePrincipalsAuthenticationDetailsProvider provider = InstancePrincipalsAuthenticationDetailsProvider
+        //        .builder().build();
         ObjectStorage client = new ObjectStorageClient(provider);
         client.setRegion("AP_TOKYO_1");
         LOGGER.info("Retrieving a list of all objects in /" + namespace + "/" + bucketName + "...");
