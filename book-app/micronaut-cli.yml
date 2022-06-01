@@ -1,0 +1,6 @@
+applicationType: function
+defaultPackage: me.shukawam.micronaut
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [annotation-api, app-name, graalvm, jackson-databind, java, junit, maven, oracle-function, readme, shade, slf4j-simple, yaml]
