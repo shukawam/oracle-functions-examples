@@ -1,5 +1,7 @@
 package com.example.fn;
 
+import com.fnproject.fn.api.httpgateway.HTTPGatewayContext;
+
 import java.io.IOException;
 import java.net.URI;
 
@@ -20,17 +22,23 @@ import javax.net.ssl.X509TrustManager;
 public class HelloFunction {
 
     private static final String API_ENDPOINT = "https://amaaaaaassl65iqapvzmjf7t3kagzdstep3gz4zw3tdasxdcs2wht3znulyq.opensearch.ap-tokyo-1.oci.oracleiaas.com:9200";
+    private static final String INDEX = "movies";
 
-    public Object handleRequest(String input) {
+    public Object handleRequest(HTTPGatewayContext ctx) {
+        if (!ctx.getQueryParameters().get("q").isPresent()) {
+            throw new RuntimeException("Query parameter is not set.");
+        }
+        String queryParameter = ctx.getQueryParameters().get("s").get();
         HttpClient httpClient = HttpClient.newBuilder().version(Version.HTTP_1_1).sslContext(insecureContext()).build();
-        return search(httpClient, input);
+        return search(httpClient, queryParameter);
     }
 
-    private Object search(HttpClient httpClient, String director) {
+    private Object search(HttpClient httpClient, String value) {
+        String query = "{\"size\": 25, \"query\": {\"multi_match\": {\"query\": value, \"field\": [\"title^4\", \"plot^2\", \"actors\", \"directors\"]}}}";
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(API_ENDPOINT + "/movies/_search?q=directors=" + director))
+            .uri(URI.create(API_ENDPOINT + "/" + INDEX + "/_search"))
             .header("Content-Type", "application/json")
-            .GET()
+            .POST(HttpRequest.BodyPublishers.ofString(query))
             .build();
         try {
             HttpResponse response = httpClient.send(request, BodyHandlers.ofString());
